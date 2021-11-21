@@ -1,0 +1,23 @@
+.app{
+    width: 900px;
+    margin: 0px auto;
+}
+
+.post{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid palevioletred;
+    border-radius: 10px;
+    margin: 15px 0px;
+    padding: 0px 10px;
+}
+
+.post > button{
+    height: 30px;
+}
+
+.posts_list{
+    list-style-type: none;
+    padding: 0px;
+}

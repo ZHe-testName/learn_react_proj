@@ -25,7 +25,7 @@ const AddPostForm = ({addPost}) => {
 
             <MyInput 
                 placeholder='Description'
-                post={post.description}
+                value={post.description}
                 onChange={e => {setPost({...post, description: e.target.value})}}/>
 
             <MyButton

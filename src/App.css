@@ -21,3 +21,9 @@
     list-style-type: none;
     padding: 0px;
 }
+
+.h1_not_found{
+    margin: 0px auto;
+    color: teal;
+    text-align: center;
+}

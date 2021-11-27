@@ -24,6 +24,11 @@ function App (){
         setPostsArr([...postsArr, newPost]);
     };
 
+    function deletePost (id){
+        console.log(id);
+        setPostsArr(postsArr.filter(post => post.id !== id));
+    };
+
     return (
         <div className='app'>
             <Counter />
@@ -32,7 +37,7 @@ function App (){
 
             <AddPostForm addPost={addPost}/>
 
-            <PostsList posts={postsArr}/>
+            <PostsList posts={postsArr} deletePost={deletePost}/>
         </div>
     );
 };

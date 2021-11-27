@@ -1,0 +1,41 @@
+.modalWrap{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modalWrap.active{
+    display: flex;
+}
+
+.modal{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: center;
+    background-color: seashell;
+    height: 250px;
+    max-width: 450px;
+    border-radius: 20px;
+}
+
+.closse{
+    position: absolute;
+    border-radius: 50%;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    color: white;
+    background-color: rgb(65, 65, 65);
+}

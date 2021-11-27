@@ -11,6 +11,10 @@ const AddPostForm = ({addPost}) => {
     const addPostHandler = e => {
         e.preventDefault();
 
+        if (!Object.values(post).every(el => !!el.trim())){
+            return;
+        };
+
         addPost(post);
 
         setPost({title: '', description: '',});

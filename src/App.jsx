@@ -1,13 +1,11 @@
 import React, { useState, useMemo } from "react";
-import ClassCounter from "./components/ClassCounter";
-import Counter from "./components/Counter";
 import PostsList from "./components/PostsList";
 
 import './App.css';
 import AddPostForm from "./components/AddPostForm";
-import MySelect from "./UI/my_select/MySelect";
-import MyInput from "./UI/my_input/MyInput";
 import PostsFilter from "./components/PostsFilter";
+import MyModal from "./UI/my_modal/MyModal";
+import MyButton from "./UI/my_button/MyButton";
 
 const initialPostsState = [
     {id: '1', title: 'JS', description: 'jjj'},
@@ -23,6 +21,7 @@ const optionsArr = [
 function App (){
     const [postsArr, setPostsArr] = useState(initialPostsState);
     const [filter, setFilter] = useState({sort: '', query: '',});
+    const [modalIsVisible, setModalVisible] = useState(false);
 
     function addPost (post){
         const newPost = {
@@ -31,6 +30,8 @@ function App (){
         };
 
         setPostsArr([...postsArr, newPost]);
+
+        setModalVisible(false);
     };
 
     function getSortedPosts (){
@@ -55,29 +56,31 @@ function App (){
     const sortedPosts = useMemo(getSortedPosts, [filter.sort, postsArr]);
 
     const sortedAndSelectedPosts = useMemo(() => sortedPosts
-                                                    .filter(p => p.title.toLowerCase().includes(filter.query.toLowerCase()))
-                                                    , [filter.query, sortedPosts]);
+                                                    .filter(p => p.title.toLowerCase().includes(filter.query.toLowerCase())
+                                                    ), [filter.query, sortedPosts]);
 
     return (
         <div className='app'>
-            {/* <Counter />
+            <MyModal
+                visible={modalIsVisible}
+                setVisible={setModalVisible}>
+                <AddPostForm addPost={addPost}/>
+            </MyModal>
 
-            <ClassCounter /> */}
-
-            <AddPostForm addPost={addPost}/>
-
-            <hr style={{backgroundColor: 'teal', margin: '10px 0px'}}/>
+            <h1 style={{textAlign: 'center'}}>MY APP</h1>
 
             <PostsFilter 
                 optionsArr={optionsArr}
                 filter={filter}
                 setFilter={setFilter}/>
 
-            {
-                (sortedAndSelectedPosts.length)
-                    ? <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
-                    : <h1 className='h1_not_found'>Posts are not found</h1>
-            }
+            <MyButton 
+                onClick={() => setModalVisible(true)}
+                >
+                Add Post
+            </MyButton>
+
+            <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
         </div>
     );
 };

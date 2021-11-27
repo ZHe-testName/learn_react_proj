@@ -1,21 +1,35 @@
 import React from 'react';
 import Post from './Post';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const PostsList = ({ posts, deletePost }) => {
     return (
         <div>
             <h2>Posts</h2>
         
-            <ul className='posts_list'>
-                {
-                    posts.map(post => <Post 
-                                        key={post.id} 
-                                        id={post.id}
-                                        title={post.title} 
-                                        description={post.description}
-                                        deletePost={deletePost}/>)
-                }
-            </ul>
+            {
+                (posts.length)
+                ?
+                <ul className='posts_list'>
+                    <TransitionGroup>
+                    {
+                        posts.map(post => <CSSTransition
+                                                key={post.id} 
+                                                timeout={500}
+                                                classNames="item"
+                                            >
+                                            <Post 
+                                                id={post.id}
+                                                title={post.title} 
+                                                description={post.description}
+                                                deletePost={deletePost}/>
+                                            </CSSTransition>)
+                    }
+                    </TransitionGroup>
+                </ul>
+                :
+                <h1 className='h1_not_found'>Posts are not found</h1>
+            }
         </div>
     );
 };

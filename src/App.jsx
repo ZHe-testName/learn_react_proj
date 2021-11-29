@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import PostsList from "./components/PostsList";
-import axios from 'axios';
 
 import './App.css';
 import AddPostForm from "./components/AddPostForm";
@@ -8,12 +7,8 @@ import PostsFilter from "./components/PostsFilter";
 import MyModal from "./UI/my_modal/MyModal";
 import MyButton from "./UI/my_button/MyButton";
 import usePosts from "./hooks/usePosts";
-
-// const initialPostsState = [
-//     {id: '1', title: 'JS', description: 'jjj'},
-//     {id: '2', title: 'TypeScript', description: 'mnnmm'},
-//     {id: '3', title: 'Phyton', description: 'ppoui'},
-// ];
+import PostService from "./API/PostService";
+import MyLoader from "./UI/my_loader/MyLoader";
 
 const optionsArr = [
     {title: 'title', value: 'title'},
@@ -24,14 +19,18 @@ function App (){
     const [postsArr, setPostsArr] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: '',});
     const [modalIsVisible, setModalVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const sortedAndSelectedPosts = usePosts(postsArr, filter.sort, filter.query);
     
     async function fetchPosts (){
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-                                    .then(res => res.data.slice(0, 40));
+        setIsLoading(true);
 
-        setPostsArr(response);
+        const posts = await PostService.getAll();
+
+        setPostsArr(posts);
+
+        setIsLoading(false);
     };
 
     useEffect(fetchPosts, []);
@@ -72,7 +71,20 @@ function App (){
                 Add Post
             </MyButton>
 
-            <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
+            {
+                (isLoading)
+                    ? 
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            marginTop: '100px',
+                        }}>
+                        <MyLoader />
+                    </div>
+                    :
+                    <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
+            }
         </div>
     );
 };

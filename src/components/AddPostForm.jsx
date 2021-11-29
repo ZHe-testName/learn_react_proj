@@ -6,7 +6,7 @@ const AddPostForm = ({addPost}) => {
     //можно создавать неконролируемые инпуты с помощю хука useRef()
     //а можно контролировать их при помощи 
     //двухстороннего связывания
-    const [post, setPost] = useState({title: '', description: '',});
+    const [post, setPost] = useState({title: '', body: '',});
 
     const addPostHandler = e => {
         e.preventDefault();
@@ -17,7 +17,7 @@ const AddPostForm = ({addPost}) => {
 
         addPost(post);
 
-        setPost({title: '', description: '',});
+        setPost({title: '', body: '',});
     };
 
     return (
@@ -29,8 +29,8 @@ const AddPostForm = ({addPost}) => {
 
             <MyInput 
                 placeholder='Description'
-                value={post.description}
-                onChange={e => {setPost({...post, description: e.target.value})}}/>
+                value={post.body}
+                onChange={e => {setPost({...post, body: e.target.value})}}/>
 
             <MyButton
                 onClick={addPostHandler}>

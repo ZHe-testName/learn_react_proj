@@ -21,7 +21,7 @@ const PostsList = ({ posts, deletePost }) => {
                                             <Post 
                                                 id={post.id}
                                                 title={post.title} 
-                                                description={post.description}
+                                                body={post.body}
                                                 deletePost={deletePost}/>
                                             </CSSTransition>)
                     }

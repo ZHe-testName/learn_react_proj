@@ -1,27 +1,40 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import PostsList from "./components/PostsList";
+import axios from 'axios';
 
 import './App.css';
 import AddPostForm from "./components/AddPostForm";
 import PostsFilter from "./components/PostsFilter";
 import MyModal from "./UI/my_modal/MyModal";
 import MyButton from "./UI/my_button/MyButton";
+import usePosts from "./hooks/usePosts";
 
-const initialPostsState = [
-    {id: '1', title: 'JS', description: 'jjj'},
-    {id: '2', title: 'TypeScript', description: 'mnnmm'},
-    {id: '3', title: 'Phyton', description: 'ppoui'},
-];
+// const initialPostsState = [
+//     {id: '1', title: 'JS', description: 'jjj'},
+//     {id: '2', title: 'TypeScript', description: 'mnnmm'},
+//     {id: '3', title: 'Phyton', description: 'ppoui'},
+// ];
 
 const optionsArr = [
     {title: 'title', value: 'title'},
-    {title: 'description', value: 'description'},
+    {title: 'body', value: 'body'},
 ];
 
 function App (){
-    const [postsArr, setPostsArr] = useState(initialPostsState);
+    const [postsArr, setPostsArr] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: '',});
     const [modalIsVisible, setModalVisible] = useState(false);
+
+    const sortedAndSelectedPosts = usePosts(postsArr, filter.sort, filter.query);
+    
+    async function fetchPosts (){
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+                                    .then(res => res.data.slice(0, 40));
+
+        setPostsArr(response);
+    };
+
+    useEffect(fetchPosts, []);
 
     function addPost (post){
         const newPost = {
@@ -34,30 +47,9 @@ function App (){
         setModalVisible(false);
     };
 
-    function getSortedPosts (){
-        return (filter.sort)
-                ? 
-                [...postsArr].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-                :
-                postsArr;
-    };
-
     function deletePost (id){
         setPostsArr(postsArr.filter(post => post.id !== id));
     };
-
-    //с помощю useMemo мы добиваемся оптимизации
-    //без этого у нас будут перерисовки и фильтрация постов на каждый клик в
-    //инпуте поиска поста
-
-    //в массиве зависимостей мы следим за некоторыми данными и толко после их
-    //измененй будет перекеширование и вызов функции
-    //а так вычисления будут браться из еша и проводится не будут
-    const sortedPosts = useMemo(getSortedPosts, [filter.sort, postsArr]);
-
-    const sortedAndSelectedPosts = useMemo(() => sortedPosts
-                                                    .filter(p => p.title.toLowerCase().includes(filter.query.toLowerCase())
-                                                    ), [filter.query, sortedPosts]);
 
     return (
         <div className='app'>

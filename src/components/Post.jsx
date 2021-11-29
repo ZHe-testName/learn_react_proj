@@ -1,7 +1,7 @@
 import React from 'react';
 import MyButton from '../UI/my_button/MyButton';
 
-const Post = ({title, description, id, deletePost}) => {
+const Post = ({title, body, id, deletePost}) => {
     const deletePostHandlaer = id => deletePost(id);
 
     return (
@@ -9,7 +9,7 @@ const Post = ({title, description, id, deletePost}) => {
             <div>
                 <strong>{title}</strong>
 
-                <div>{description}</div>
+                <div>{body}</div>
             </div>
 
             <MyButton

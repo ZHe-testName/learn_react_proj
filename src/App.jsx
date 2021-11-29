@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PostsList from "./components/PostsList";
 
 import './App.css';
@@ -9,6 +9,8 @@ import MyButton from "./UI/my_button/MyButton";
 import usePosts from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import MyLoader from "./UI/my_loader/MyLoader";
+import useFetching from "./hooks/useFetching";
+import getPageCount from "./utils/getPageCount";
 
 const optionsArr = [
     {title: 'title', value: 'title'},
@@ -19,21 +21,23 @@ function App (){
     const [postsArr, setPostsArr] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: '',});
     const [modalIsVisible, setModalVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [totlalCount, setTotalCount] = useState(0);
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+
+    const [isLoading, fetching, error] = useFetching(async () => {
+        const responce = await PostService.getAll(limit, page);
+
+        setPostsArr(responce.data);
+
+        const totalCount = +responce.headers['x-total-count'];
+
+        setTotalCount(getPageCount(totalCount, limit));
+    });
 
     const sortedAndSelectedPosts = usePosts(postsArr, filter.sort, filter.query);
-    
-    async function fetchPosts (){
-        setIsLoading(true);
 
-        const posts = await PostService.getAll();
-
-        setPostsArr(posts);
-
-        setIsLoading(false);
-    };
-
-    useEffect(fetchPosts, []);
+    useEffect(fetching, []);
 
     function addPost (post){
         const newPost = {
@@ -84,6 +88,15 @@ function App (){
                     </div>
                     :
                     <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
+            }
+
+            {
+                error && <h1 style={{
+                                textAlign: 'center',
+                                color: 'tomato',  
+                            }}>
+                            {error}
+                        </h1>
             }
         </div>
     );

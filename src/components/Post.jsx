@@ -7,7 +7,7 @@ const Post = ({title, body, id, deletePost}) => {
     return (
         <li className='post'>
             <div>
-                <strong>{title}</strong>
+                <strong>{id}. {title}</strong>
 
                 <div>{body}</div>
             </div>

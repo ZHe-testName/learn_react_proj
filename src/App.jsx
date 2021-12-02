@@ -10,7 +10,8 @@ import usePosts from "./hooks/usePosts";
 import PostService from "./API/PostService";
 import MyLoader from "./UI/my_loader/MyLoader";
 import useFetching from "./hooks/useFetching";
-import getPageCount from "./utils/getPageCount";
+import { getPageCount } from "./utils/getPageCount";
+import Pagination from "./components/Pagination";
 
 const optionsArr = [
     {title: 'title', value: 'title'},
@@ -21,7 +22,7 @@ function App (){
     const [postsArr, setPostsArr] = useState([]);
     const [filter, setFilter] = useState({sort: '', query: '',});
     const [modalIsVisible, setModalVisible] = useState(false);
-    const [totlalCount, setTotalCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
 
@@ -37,7 +38,7 @@ function App (){
 
     const sortedAndSelectedPosts = usePosts(postsArr, filter.sort, filter.query);
 
-    useEffect(fetching, []);
+    useEffect(fetching, [page]);
 
     function addPost (post){
         const newPost = {
@@ -57,17 +58,17 @@ function App (){
     return (
         <div className='app'>
             <MyModal
-                visible={modalIsVisible}
-                setVisible={setModalVisible}>
-                <AddPostForm addPost={addPost}/>
+                visible={ modalIsVisible }
+                setVisible={ setModalVisible }>
+                <AddPostForm addPost={ addPost }/>
             </MyModal>
 
             <h1 style={{textAlign: 'center'}}>MY APP</h1>
 
             <PostsFilter 
-                optionsArr={optionsArr}
-                filter={filter}
-                setFilter={setFilter}/>
+                optionsArr={ optionsArr }
+                filter={ filter }
+                setFilter={ setFilter }/>
 
             <MyButton 
                 onClick={() => setModalVisible(true)}
@@ -87,7 +88,7 @@ function App (){
                         <MyLoader />
                     </div>
                     :
-                    <PostsList posts={sortedAndSelectedPosts} deletePost={deletePost}/>
+                    <PostsList posts={ sortedAndSelectedPosts } deletePost={ deletePost }/>
             }
 
             {
@@ -95,9 +96,14 @@ function App (){
                                 textAlign: 'center',
                                 color: 'tomato',  
                             }}>
-                            {error}
+                            { error }
                         </h1>
             }
+
+           <Pagination 
+                    totalCount={ totalCount } 
+                    setPage={ setPage } 
+                    page={ page }/>
         </div>
     );
 };

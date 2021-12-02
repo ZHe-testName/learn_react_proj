@@ -8,4 +8,13 @@ export default class PostService {
                 _page: page,
             }
         });
-}};
+    }
+
+    static async getById (id){
+        return await axios.get('https://jsonplaceholder.typicode.com/posts/' + id);
+    }
+
+    static async getComentsByPostId (id){
+        return await axios.get(`https://jsonplaceholder.typicode.com/posts/${id}/comments`);
+    }
+};

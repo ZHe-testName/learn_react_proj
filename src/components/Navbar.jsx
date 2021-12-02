@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
+    const { isAuth, setIsAuth } = useContext(AuthContext);
+
+    const logout = () => {
+        setIsAuth(false);
+
+        localStorage.removeItem('auth');
+    };
+
     return (
         <nav className='navigation'>
-            <div>
-                <Link to='/posts'>
-                    Posts
-                </Link>
+            {
+                isAuth
+                    ?
+                    <div>
+                        <Link to='/posts'>
+                            Posts
+                        </Link>
+        
+                        <Link to='/about'>
+                            About
+                        </Link>
 
-                <Link to='/about'>
-                    About
-                </Link>
-            </div>
+                        <button onClick={logout}>
+                            Logoff
+                        </button>
+                    </div>
+                    :
+                    null
+            }
         </nav>
     );
 };

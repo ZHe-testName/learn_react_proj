@@ -27,7 +27,7 @@ const Posts = () => {
     const [isLoading, fetching, error] = useFetching(async () => {
         const responce = await PostService.getAll(limit, page);
 
-        setPostsArr(responce.data);
+        setPostsArr([...postsArr, ...responce.data]);
 
         const totalCount = +responce.headers['x-total-count'];
 
@@ -75,29 +75,25 @@ const Posts = () => {
                 Add Post
             </MyButton>
 
-            {
-                (isLoading)
-                    ? 
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginTop: '100px',
-                        }}>
-                        <MyLoader />
-                    </div>
-                    :
-                    <>
-                        <PostsList 
-                                posts={ sortedAndSelectedPosts } 
-                                deletePost={ deletePost }/>
+            <PostsList 
+                    posts={ sortedAndSelectedPosts } 
+                    deletePost={ deletePost }/>
 
-                        <Pagination 
-                                totalCount={ totalCount } 
-                                setPage={ setPage } 
-                                page={ page }/>
-                    </>
+            {
+                (isLoading) && <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        marginTop: '100px',
+                                    }}>
+                                    <MyLoader />
+                                </div>
             }
+
+            <Pagination 
+                    totalCount={ totalCount } 
+                    setPage={ setPage } 
+                    page={ page }/>
 
             {
                 error && <h1 style={{

@@ -1,6 +1,7 @@
 .app{
     width: 900px;
     margin: 0px auto;
+    margin-top: 100px;
 }
 
 .post{
@@ -40,6 +41,16 @@
     padding: 0px;
 }
 
+.post_buttons_wrap{
+    display: flex;
+    width: 220px;
+    justify-content: flex-end;
+}
+
+.post_buttons_wrap > button:first-child{
+    margin-right: 10px;
+}
+
 .h1_not_found{
     margin: 0px auto;
     color: teal;
@@ -72,13 +83,13 @@
     left: 0px;
     top: 0px;
     width: 100vw;
-    height: 40px;
+    height: 60px;
     background-color: rgb(38 39 38 / 63%);
 }
 
 .navigation > div{
     margin-left: 85%;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .navigation > div > a{

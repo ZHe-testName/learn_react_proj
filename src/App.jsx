@@ -1,14 +1,8 @@
 import React from "react";
 import './App.css';
-import Posts from "./pages/Posts";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import About from "./pages/About";
+import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import AppRouter from "./components/AppRouter";
 
 function App (){
     return (
@@ -16,24 +10,7 @@ function App (){
             <Router>
                 <Navbar />
 
-                <Switch>
-                    <Route path='/posts'>
-                        <Posts />
-                    </Route>
-
-                    <Route path='/about'>
-                        <About />
-                    </Route>
-
-                    {/* 
-                    конструкция switch позволяет выбрать
-                    один из представленых маршрутов
-                    если маршруты не сходятся
-                    то в конце конструкции switch
-                    можно добавить редирект с адресом который отработает
-                    если нужные адреса не будут найдены */}
-                    <Redirect to='/posts'/>
-                </Switch>
+                <AppRouter />
             </Router>
         </div>
     );

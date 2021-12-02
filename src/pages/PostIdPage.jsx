@@ -49,7 +49,13 @@ const PostIdPage = () => {
                     ?
                     <ul>
                         {
-                            comments.map(c => <li key={c.id}>{c.body}</li>)
+                            comments.map(c => <li key={c.id}>
+                                <h4>{c.email}</h4>
+
+                                <div>
+                                    {c.body}
+                                </div>
+                            </li>)
                         }
                     </ul>
                     :

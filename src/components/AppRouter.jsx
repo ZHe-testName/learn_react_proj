@@ -1,35 +1,21 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import Posts from '../pages/Posts';
-import About from '../pages/About'
-import ErrorPage from '../pages/ErrorPage';
-import PostIdPage from '../pages/PostIdPage';
+import { privateRoutes, publicRoutes } from '../routes/routes';
 
 const AppRouter = () => {
+    const isAuth = false;
+
     return (
-        <>
+        isAuth
+            ?
             <Switch>
-                {/* exact нужен чтобы маршрутизатор
-                воспринимал путь именно таким каким он есть 
-                в противном случае /posts и /posts/id
-                будут восприняты как один и тотже маршрут */}
-                <Route exact path='/posts'>
-                    <Posts />
-                </Route>
-
-                <Route path='/about'>
-                    <About />
-                </Route>
-
-                <Route path='/error'>
-                    <ErrorPage />
-                </Route>
-
-                {/* для того чтобы динамически добавлять часть маршрута
-                нужно поставить двоеточие перед параметроь */}
-                <Route exact path='/posts/:id'>
-                    <PostIdPage />
-                </Route>
+                {
+                    privateRoutes.map(r => <Route
+                                                key={r.path} 
+                                                path={r.path} 
+                                                component={r.component} 
+                                                exact={r.exact}/>)
+                }
 
                 {/* 
                 конструкция switch позволяет выбрать
@@ -38,9 +24,20 @@ const AppRouter = () => {
                 то в конце конструкции switch
                 можно добавить редирект с адресом который отработает
                 если нужные адреса не будут найдены */}
-                <Redirect to='/error'/>
+                <Redirect to='/posts'/>
             </Switch> 
-        </>
+            :
+            <Switch>
+                {
+                    publicRoutes.map(r => <Route
+                                                key={r.path} 
+                                                path={r.path} 
+                                                component={r.component} 
+                                                exact={r.exact}/>)
+                }
+
+                <Redirect to='/login'/>
+            </Switch> 
     );
 };
 

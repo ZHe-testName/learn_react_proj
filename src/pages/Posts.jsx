@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Pagination from '../components/Pagination';
 import PostService from '../API/PostService';
 import PostsFilter from '../components/PostsFilter';
@@ -10,6 +10,8 @@ import MyLoader from '../UI/my_loader/MyLoader';
 import MyModal from '../UI/my_modal/MyModal';
 import { getPageCount } from '../utils/getPageCount';
 import AddPostForm from '../components/AddPostForm';
+import { useObserver } from '../hooks/useObserve';
+import MySelect from '../UI/my_select/MySelect';
 
 const Posts = () => {
     const optionsArr = [
@@ -24,6 +26,8 @@ const Posts = () => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
 
+    const divMarker = useRef();
+
     const [isLoading, fetching, error] = useFetching(async () => {
         const responce = await PostService.getAll(limit, page);
 
@@ -36,7 +40,11 @@ const Posts = () => {
 
     const sortedAndSelectedPosts = usePosts(postsArr, filter.sort, filter.query);
 
-    useEffect(fetching, [page]);
+    useEffect(fetching, [page, limit]);
+
+    useObserver(divMarker, page < totalCount, isLoading, () => {
+        setPage(page + 1);
+    });
 
     function addPost (post){
         const newPost = {
@@ -69,6 +77,17 @@ const Posts = () => {
                 filter={ filter }
                 setFilter={ setFilter }/>
 
+            <MySelect 
+                    value={limit}
+                    defaultValue='Amount of posts'
+                    onChange={value => setLimit(value)}
+                    options={[
+                        {value: 5, title: '5'},
+                        {value: 10, title: '10'},
+                        {value: 25, title: '25'},
+                        {value: -1, title: 'All'},
+                    ]}/>
+
             <MyButton 
                 onClick={() => setModalVisible(true)}
                 >
@@ -89,6 +108,8 @@ const Posts = () => {
                                     <MyLoader />
                                 </div>
             }
+
+            <div ref={divMarker} style={{ height: '50px'}}></div>
 
             <Pagination 
                     totalCount={ totalCount } 

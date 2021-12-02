@@ -66,3 +66,26 @@
 .pag_active{
     box-shadow: 0px 0px 5px 1px #24ff2b;
 }
+
+.navigation{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 40px;
+    background-color: rgb(38 39 38 / 63%);
+}
+
+.navigation > div{
+    margin-left: 85%;
+    margin-top: 10px;
+}
+
+.navigation > div > a{
+    color: white;
+    text-decoration: none;
+}
+
+.navigation > div > a:last-child{
+    margin-left: 15px;
+}
